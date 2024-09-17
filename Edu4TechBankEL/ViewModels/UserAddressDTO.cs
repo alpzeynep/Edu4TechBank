@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml.Bibliography;
-using Edu4TechBankEL.IdentityModels;
+﻿using Edu4TechBankEL.IdentityModels;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -8,14 +7,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Edu4TechBankEL.Entities
+namespace Edu4TechBankEL.ViewModels
 {
-    [Table("UserAddress")]
-    public class UserAddress : IBaseEntity<int>
-    {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-
+    public class UserAddressDTO
+    { 
         public int Id { get; set; }
         public DateTime CreatedDate { get; set; }
 
@@ -27,7 +22,7 @@ namespace Edu4TechBankEL.Entities
 
         public bool IsDeleted { get; set; }
 
-        [ForeignKey("UserId")]
-        public virtual AppUser User { get; set; }
+        //AppUserDTO olmamasının nedeni identity microsofttan otomatik geliyor 
+        public AppUser? User { get; set; }
     }
 }
