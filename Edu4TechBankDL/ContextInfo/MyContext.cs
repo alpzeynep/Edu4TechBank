@@ -5,10 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Edu4TechBankEL.IdentityModels;
 
 namespace Edu4TechBankDL.ContextInfo
 {
-    public class MyContext : DbContext
+    public class MyContext : IdentityDbContext<AppUser, AppRole, string>
     {
         public MyContext()
         {
@@ -21,5 +23,11 @@ namespace Edu4TechBankDL.ContextInfo
 
         public virtual DbSet< BankAccType> BankAccTypeTable {get;set;}
         public virtual DbSet<BankAccounts> BankAccountsTable { get; set; }
+        public virtual DbSet<UserAddress> UserAddressTable { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("Server=DESKTOP-DQT2T81\\SQLEXPRESS;Database=Edu4TechBank;Trusted_Connection=True;Trust Server Certificate=True;");
+        }
     }
 }

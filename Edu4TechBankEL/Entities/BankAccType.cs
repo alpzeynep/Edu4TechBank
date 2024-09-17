@@ -15,7 +15,13 @@ namespace Edu4TechBankEL.Entities
         public int Id { get;set; }
         public DateTime CreatedDate { get;set; }
         [Required]
-        public string AccountType { get; set; }
+        public AccountType AccountType { get; set; }
         public bool IsDeleted { get;set; }
+    }
+    public enum AccountType
+    {
+        YOK=0,
+        VADELİ=1,
+        VADESİZ=2
     }
 }

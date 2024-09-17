@@ -15,7 +15,7 @@ namespace Edu4TechBankEL.Entities
         public int Id {get;set; }
         public int UserId { get;set; }
         public int BankAccTypeId { get;set; }
-        public int BankKardNo { get;set; }
+        public int Iban { get;set; }
         public int Balance { get;set; }
         public DateTime CreatedDate { get;set; }
         public bool IsDeleted { get;set; }

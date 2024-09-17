@@ -24,4 +24,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Edu4TechBankDL\Edu4TechBankDL.csproj" />
+    <ProjectReference Include="..\Edu4TechBankEL\Edu4TechBankEL.csproj" />
+  </ItemGroup>
+
 </Project>
