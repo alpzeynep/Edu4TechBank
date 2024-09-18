@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace Edu4TechBankEL.ResultModels
 {
-    internal class Result
-    {
+ 
         public class Result : IResult
         {
             public bool IsSuccess { get; set; }
@@ -23,5 +22,5 @@ namespace Edu4TechBankEL.ResultModels
                 this.Message = msg;
             }
         }
-    }
+
 }

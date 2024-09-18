@@ -29,8 +29,4 @@
     <ProjectReference Include="..\Edu4TechBankEL\Edu4TechBankEL.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ImplementationsofManagers\" />
-  </ItemGroup>
-
 </Project>
