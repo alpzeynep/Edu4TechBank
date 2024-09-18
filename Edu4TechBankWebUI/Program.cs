@@ -1,3 +1,16 @@
+using AutoMapper.Extensions.ExpressionMapping;
+using DocumentFormat.OpenXml.Spreadsheet;
+using Edu4TechBankBL.EmailSenderProcess;
+using Edu4TechBankBL.ImplementationofManagers;
+using Edu4TechBankBL.ImplementationsofManagers;
+using Edu4TechBankBL.InterfacesOfManagers;
+using Edu4TechBankDL.ContextInfo;
+using Edu4TechBankEL.Entities;
+using Edu4TechBankEL.IdentityModels;
+using Edu4TechBankEL.ViewModels;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+
 namespace Edu4TechBankWebUI
 {
     public class Program
@@ -6,16 +19,60 @@ namespace Edu4TechBankWebUI
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+        
+     
+
+            builder.Services.AddDbContext< MyContext >(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("ZeynepAlp"));
+                // options.UseSqlServer(builder.Configuration.GetConnectionString("BetülHoca"));
+
+            });
+            builder.Services.AddIdentity<AppUser, AppRole>(options =>
+            {
+                options.User.RequireUniqueEmail = true;
+                options.Password.RequireDigit = true;
+                options.Password.RequireNonAlphanumeric = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireLowercase = true;
+                options.Password.RequiredLength = 8;
+                options.Password.RequiredUniqueChars = 1;
+      
+            }).AddDefaultTokenProviders().AddEntityFrameworkStores<MyContext>();
+
+
+
+
+            builder.Services.ConfigureApplicationCookie(opt =>
+            {
+                opt.Cookie.HttpOnly = true;
+                opt.ExpireTimeSpan = TimeSpan.FromMinutes(5);
+                opt.ExpireTimeSpan = TimeSpan.FromHours(1);
+                opt.LoginPath = "/Account/Login";
+                opt.AccessDeniedPath = "/Account/Login";
+                opt.SlidingExpiration = true;
+
+            });
+            builder.Services.AddAutoMapper(opt =>
+            {
+                opt.AddExpressionMapping();
+                opt.AddProfile(typeof(Maps));
+            });
+
+            builder.Services.AddScoped<IEmailManager, EmailManager>();
+            builder.Services.AddScoped<IUserAddressManager , UserAddressManager>();
+            builder.Services.AddScoped<IBankAccountsManager, BankAccountsManager>();
+            builder.Services.AddScoped<IBankAccTypeManager, BankAccTypeManager>();
+
             builder.Services.AddControllersWithViews();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                
                 app.UseHsts();
             }
 
@@ -24,6 +81,7 @@ namespace Edu4TechBankWebUI
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(

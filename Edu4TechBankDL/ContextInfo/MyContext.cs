@@ -25,9 +25,6 @@ namespace Edu4TechBankDL.ContextInfo
         public virtual DbSet<BankAccounts> BankAccountsTable { get; set; }
         public virtual DbSet<UserAddress> UserAddressTable { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Server=DESKTOP-DQT2T81\\SQLEXPRESS;Database=Edu4TechBank;Trusted_Connection=True;Trust Server Certificate=True;");
-        }
+       
     }
 }

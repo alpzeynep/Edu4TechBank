@@ -1,0 +1,76 @@
+﻿
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container">
+
+    <form asp-controller="Account" asp-controller="Register" method="post" class="form">
+     <div class="row"
+        <div class="col-6"
+             <div class="form-group">
+                 <label class="form-label">İsim</label> <br />
+                 <input type="text" class="form-control"/>
+              </div>
+         </div>
+        <div class="col-6"
+             <div class="form-group">
+                 <label class="form-label">Soyisim</label> <br />
+                 <input type="text" class="form-control"/>
+             </div>
+         </div>
+     </div>
+      <br />
+     <div class="row"
+    <div class="col-6"
+      <div class="form-group">
+          <label class="form-label">Email</label> <br />
+          <input type="email" class="form-control"/>
+       </div>
+   </div>
+    <div class="col-6"
+      <div class="form-group">
+      <label class="form-label">Sifre</label> <br />
+      <input type="password" class="form-control"/>
+      </div>
+     </div>
+     </div>
+        <br />
+     <div class="row"
+    <div class="col-6"
+      <div class="form-group">
+          <label class="form-label">Sifre tekrar</label><br/>
+          <input type="password" class="form-control"/>
+       </div>
+   </div>
+    <div class="col-6"
+      <div class="form-group">
+      <label class="form-label">Dogum Tarihi</label> <br />
+      <input type="date" class="form-control"/>
+      </div>
+     </div>
+     </div>
+        <br />
+     <div class="row"
+    <div class="col-6"
+      <div class="form-group">
+          <label class="form-label">Cinsiyet</label> <br />
+          <select class="form-control">
+            <option value="0">BELİRSİZ</option>
+            <option value="1">KADIN</option>
+            <option value="2">ERKEK</option>
+        </select>
+       </div>
+   </div>
+   </div>
+        <br />
+     <div class="row"
+      <div class="col-6"
+      <button type="submit" class=" btn btn info">KAYIT OL</button>
+      </div>
+    </div>
+       
+   </form>
+</div>
+
+ 
