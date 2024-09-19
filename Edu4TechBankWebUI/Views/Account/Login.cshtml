@@ -6,9 +6,15 @@
 <form asp-controller="Account" asp-controller="Register" method="post" >
 <div class="form sign-in">
     <h2>Hoşgeldiniz</h2>
+        <div class="row">
+            @Html.ValidationSummary(false, "", new { @style = "color:blue" })
+            <div asp-validation-summary="ModelOnly" style="color:blue" ;> </div>
+            <div asp-validation-summary="All" style="color:red" ;> </div>
+        </div>
+
     <label>
         <span>Email</span>
-        <input type="email" name="Email" />
+            <input type="email" name="emailorUsername" />
     </label>
     <label>
         <span>Password</span>

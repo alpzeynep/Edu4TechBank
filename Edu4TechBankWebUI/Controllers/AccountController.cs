@@ -1,7 +1,9 @@
-﻿using Edu4TechBankEL.IdentityModels;
+﻿using Edu4TechBankEL.AllEnums;
+using Edu4TechBankEL.IdentityModels;
 using Edu4TechBankWebUI.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace Edu4TechBankWebUI.Controllers
 {
@@ -9,11 +11,13 @@ namespace Edu4TechBankWebUI.Controllers
     {
         private readonly UserManager<AppUser> _userManager;
         private readonly RoleManager<AppRole> _roleManager;
+        private readonly SignInManager<AppUser> _signInManager;
 
-        public AccountController(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager) //Dependency Intection
+        public AccountController(UserManager<AppUser> userManager, RoleManager<AppRole> roleManager, SignInManager<AppUser> signInManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
+            _signInManager = signInManager;
         }
 
         public IActionResult Login()
@@ -21,9 +25,60 @@ namespace Edu4TechBankWebUI.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Login(string? email, string? password)
+        public IActionResult Login(string? emailorUsername, string? password)
         {
-            return View();
+            try
+            {
+                if (string.IsNullOrEmpty(emailorUsername) || string.IsNullOrEmpty(password))
+                {
+                    ModelState.AddModelError("", "Email ya da kullanıcı adı ve şifre alanlarını giriniz!");
+                    return View("Login");
+                }
+                //emailorUsername gelen parametreye ait kullanııc var mı?
+                var user = _userManager.FindByEmailAsync(emailorUsername).Result;
+                if (user == null)
+                {
+                    user = _userManager.FindByNameAsync(emailorUsername).Result;
+                }
+                if (user == null)
+                {
+                    ModelState.AddModelError("", "Lütfen sisteme kayıtlı email ya da kullanıcı adınızla giriş yapınız! ");
+                    return View("Login");
+                }
+
+                //Role bakmamız
+                #region Yontem 2
+                //şifre kontrolü
+                var signInResult = _signInManager.PasswordSignInAsync(user, password, true, false).Result;
+                if (!signInResult.Succeeded)
+                {
+                    ModelState.AddModelError("", "Email / kullanıcı adı ve şifrenizi doğru girdiğinize emin olunuz!");
+                    return View("Login");
+                }
+
+                else if (_userManager.IsInRoleAsync(user, Roles.BANKACLSN.ToString()).Result)
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
+                else if (_userManager.IsInRoleAsync(user, Roles.MUSTERI.ToString()).Result)
+                {
+                    return RedirectToAction("Hesaplarim", "Account");
+                }
+                //assignment : Eğer bu kişi sistemde deleted olmuşsa rolü deleted şeklindedir ozaman giriş yapmaya çalıştığında farklı bir sayfaya yönlendirilip o sayfada "Beni tekrar AKtif yap" butonu olsun ve o butona tıklarsa rolü deleted --> member
+
+                #endregion
+
+
+                return View("Login");
+
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Beklenmedik Hata");
+                return View();
+            }
+
+
         }
         public IActionResult Register()
         {
@@ -98,5 +153,16 @@ namespace Edu4TechBankWebUI.Controllers
                 return View();
             }
         }
+
+
+    
+    public IActionResult Hesaplarim()
+    {
+        return View();
     }
+
+
+
+
+}
 } 
