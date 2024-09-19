@@ -8,8 +8,10 @@ using Edu4TechBankDL.ContextInfo;
 using Edu4TechBankEL.Entities;
 using Edu4TechBankEL.IdentityModels;
 using Edu4TechBankEL.ViewModels;
+using Edu4TechBankWebUI.CreateDefaultData;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Edu4TechBankWebUI
 {
@@ -88,7 +90,19 @@ namespace Edu4TechBankWebUI
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            app.Run();
+            using (var appScope = app.Services.CreateScope())
+            {
+               var serviceProvider = appScope.ServiceProvider;
+
+               var roleManager =
+                    serviceProvider.GetRequiredService<RoleManager<AppRole>>(); var emailManager=
+                   serviceProvider.GetRequiredService<IEmailManager>();
+               CreatedData createdData = new CreatedData();
+                createdData.CreateAllRoles(roleManager, emailManager);
+
+            }
+
+                app.Run();
         }
     }
 }

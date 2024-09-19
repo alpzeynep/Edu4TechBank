@@ -34,52 +34,69 @@ namespace Edu4TechBankWebUI.Controllers
         {
             try
             {
-                if(!ModelState.IsValid)
+                if (!ModelState.IsValid)
                 {
-                    ModelState.AddModelError("", "Girişi düzgün yapınız");
+                    ModelState.AddModelError("", "Girişleri düzgün yapınız");
                     return View(model);
                 }
-                //isim
-                var sameUserName = _userManager.FindByNameAsync(model.Username).Result;
 
-                if (sameUserName != null)
-                {
-                    ModelState.AddModelError("", $"{model.Username} isminde bir kullanıcı zaten sistemde var!");
-                    return View(model);
-                }
-                //email
-                var sameEmail = _userManager.FindByEmailAsync(model.Email).Result;
+                //// kullanıcı adı
+                //var sameUserName = _userManager.FindByNameAsync(model.Username).Result;
 
-                if (sameEmail != null)
-                {
-                    ModelState.AddModelError("", $"{model.Email} bu email zaten sistemde var!");
-                    return View(model);
-                }
-                //kayıt
+                //if (sameUserName != null)
+                //{
+                //    ModelState.AddModelError("", $"{model.Username} adlı kulanıcı zaten var.");
+                //    return View(model);
+                //}
+                ////email
+                //var sameEmail = _userManager.FindByEmailAsync(model.Email).Result;
+
+                //if (sameEmail != null)
+                //{
+                //    ModelState.AddModelError("", $"{model.Email} adlı email zaten var.");
+                //    return View(model);
+                //}
                 AppUser user = new AppUser()
                 {
-                    Name= model.Name,
+                    Name = model.Name,
                     Surname = model.Surname,
                     Email = model.Email,
                     UserName = model.Username,
                     Gender = model.Gender,
                     BirthDate = model.Birthdate,
-                    EmailConfirmed=false
+                    EmailConfirmed = false
                 };
+
                 var result = _userManager.CreateAsync(user, model.Password).Result;
                 if (!result.Succeeded)
                 {
-                    ModelState.AddModelError("", "Kayıt olunamadı!");
+                    string hataMesaji = string.Empty;
+                    if (result.Errors != null)
+                    {
+                        foreach (var item in result.Errors)
+                        {
+                            hataMesaji += $"{item.Description}\n";
+                        }
+                    }
+                    ModelState.AddModelError("", $"Kayıt başarısızdır! {hataMesaji}");
                     return View(model);
+
+                }
+               var roleResult= _userManager.AddToRoleAsync(user, "Musteri").Result;
+                if (!roleResult.Succeeded)
+                {
+
                 }
 
-                return RedirectToAction("Address");
+
+
+                return RedirectToAction("Address", "Home");
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "Bir hata oluştu");
+                ModelState.AddModelError("", ex.Message);
                 return View();
             }
         }
     }
-}
+} 
